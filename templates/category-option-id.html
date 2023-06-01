@@ -1,0 +1,124 @@
+
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+    <main id="main">
+
+
+
+        <!-- ======= Blog Page ======= -->
+        <div class="blog-page area-padding">
+            <div class="container">
+                <div class="row new_row">
+                    <div class="col-lg-8 col-md-8">
+                        <div class="page-head-blog">
+                            <div class="single-blog-page">
+                                <!-- search option start -->
+                                <form method="POST" action="{% url 'search' %}" >
+                                    {% csrf_token %}
+                                    <div class="search-option">
+                                        <input type="text" name="search_btn" placeholder="Search for books">
+                                        <button class="button" type="submit">
+                                        <i class="bi bi-search"></i>
+                                        
+                                        </button>
+                                    </div>
+                                </form>
+                                <!-- search option end -->
+                            </div>
+                            <div class="single-blog-page">
+                                <!-- recent start -->
+                                <div class="left-blog">
+                                    <h4>BOOKS</h4>
+                                    <div class="recent-post">
+                                        <!-- start single post -->
+                                        {% if category_id %}
+                                        {% for book in category_id  %}
+                                        <div class="recent-single-post">
+                                            <div class="post-img">
+                                                {% if book.cover %}
+                                                <a href="{{book.get_absolute_url}}">
+                                                    <img src="{{book.cover.url}}" alt="{{book.title}}" style="width: 100px; height: 60px;">
+                                                </a>
+                                                {% else %}
+                                                <a href="{{book.get_absolute_url}}">
+                                                    <img src="{% static 'img/background/empty.jfif' %}" alt="No image here" style="width: 100px; height: 60px;">
+                                                </a>
+
+                                                {% endif %}
+                                            </div>
+                                            <div class="pst-content">
+                                                <p>
+                                                    <a href="{{book.get_absolute_url}}"> <strong>{{book.title}}</strong></a>
+                                                    <br>
+                                                    <span class="comments-type">
+                                                        <i class="bi bi-person"></i>
+                                                        <a href="{{book.get_absolute_url}}"> {{book.author}}</a>
+                                                        </span> |
+                                                        {% if book.get_total_comments %}
+                                                    <span class="comments-type">
+                                                          <i class="bi bi-chat"></i>
+                                                          <a href="{{book.get_absolute_url}}"> {{book.get_total_comments}} comments</a>
+                                                          </span> |
+                                                          {% endif %}
+                                                    <span class="date-type">
+                                                      <i class="bi bi-calendar"></i> {{book.updated_on}}
+                                                    </span>
+
+
+
+                                                </p>
+
+
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                        {% else %}
+                                
+                                        <p> No books in this Category </p>
+                                       
+                                        {% endif %}
+                                        <!-- End single post -->
+
+
+                                    </div>
+                                </div>
+                                <!-- recent end -->
+                            </div>
+                            
+
+                            <div class="single-blog-page">
+                                <div class="left-tags blog-tags">
+                                    <div class="popular-tag left-side-tags left-blog">
+                                        <h4>Categories</h4>
+                                        <ul>
+                                            
+                                          {% for category in category  %}
+                            
+                                            <li>
+                                                
+                                               <a href="{% url 'category_id' category.id%}">{{category.title}}</a>
+                                               
+                                            </li>
+                                   
+                                            {% endfor %}
+                                            
+                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End left sidebar -->
+                    <!-- Start single blog -->
+                    {% include 'paginator.html' %}
+
+                </div>
+            </div>
+        </div>
+        <!-- End Blog Page -->
+
+    </main>
+{% endblock %}

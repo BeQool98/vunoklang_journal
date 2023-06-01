@@ -1,0 +1,85 @@
+{% load static %}
+<div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="row">
+        <h4>Latest Uploads</h4>
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="single-blog">
+                
+                {% for latest in book_page reversed %}
+                <div class="single-blog-img">
+                    <a href="{{latest.get_absolute_url}}">
+                        {% if latest.cover %}
+                        <img src="{{latest.cover.url}}" alt="{{latest.title}}">
+                        {% else %}
+                        <img src="{% static 'img/background/empty.jfif' %}" alt="No image here">
+                        
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="blog-meta">
+                    {% if latest.get_total_comments %}
+                    <span class="comments-type">
+                    <i class="bi bi-chat"></i>
+                    <a href="#">{{latest.get_total_comments}} comments</a>
+                  </span>
+                  {% endif %}
+                    <span class="date-type">
+                    <i class="bi bi-calendar"></i>{{latest.updated_on}}
+                  </span>
+                </div>
+                <div class="blog-text">
+                    <h4>
+                        <a href="#">{{latest.title}}</a>
+                    </h4>
+                    <p>
+                        {{latest.description | slice:200}}...
+                    </p>
+                </div>
+                <span>
+                    <a href="{{latest.get_absolute_url}}" class="ready-btn">Read more</a>
+                  </span>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- End single blog -->
+
+
+
+        <div class="blog-pagination">
+            {% comment %} {% if is_paginated %} {% endcomment %}
+            {% if book_page.has_other_pages %}
+            <ul class="pagination">
+                {% if book_page.has_previous %}
+                {% comment %} {% if page_obj.has_previous %} {% endcomment %}
+                <li class="page-item"><a href="?page={{ book_page.previous_page_number }}" class="page-link">&lt;</a></li>
+                {% else %}
+                <li class="disabled page-item"><a href="" class="page-link">&lt;</a></li>
+                {% endif %}
+                {% if book_page.number|add:'-4' > 1 %}
+                    <li class="page-item"><a href="?page={{ book_page.number|add:'-3' }}" class="page-link">&hellip;</a></li>
+                {% endif %}
+
+                {% for i in book_page.paginator.page_range %}
+                {% if book_page.number == i %}
+                <li class="page-item active"><a href="{{ i }}" class="page-link">{{ i }}</a></li>
+                {% elif i > book_page.number|add:'-3' and i < book_page.number|add:'3' %}
+                <li class="page-item"><a href="?page={{ i }}" class="page-link">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if book_page.paginator.num_pages > book_page.number|add:'4' %}
+                    <li class="page-item"><a href="?page={{ book_page.number|add:'3' }}" class="page-link">&hellip;</a></li>
+                {% endif %}
+                {% comment %} <li class="page-item"><a href="#" class="page-link">2</a></li>
+                <li class="page-item"><a href="#" class="page-link">3</a></li> {% endcomment %}
+                {% if book_page.has_next %}
+                <li class="page-item"><a href="?page={{ book_page.next_page_number }}" class="page-link">&gt;</a></li>
+                {% else %}
+                <li class="disabled page-item"><a href="" class="page-link">&gt;</a></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>

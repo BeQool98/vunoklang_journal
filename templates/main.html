@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
+
+    <title>{% block title %}{{owner.title}}{% endblock title %}</title>
+    <meta name="description" content="{{owner.meta_description}}" >
+    <meta name="keywords" content="{{owner.keywords}}" >
+    <meta name="author" content="{{owner.meta_author}}">
+
+
+    <!-- Favicons -->
+    <link href="{{owner.favicon.url}}" rel="icon">
+    <link href="{{owner.favicon.url}}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Raleway:300,400,400i,500,500i,700,800,900" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/animate.css/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="styleshee">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{% static 'css/style.css'%}" rel="stylesheet">
+
+    <!-- =======================================================
+  * Template Name: eBusiness
+  * Updated: Mar 10 2023 with Bootstrap v5.2.3
+  * Template URL: https://bootstrapmade.com/ebusiness-bootstrap-corporate-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container d-flex justify-content-between">
+
+            <div class="logo d-flex">
+                {% if  owner.logo%}
+                <a href="{%url 'home'%}"><img src="{{owner.logo.url}}" alt="{{owner.title}}" class="img-fluid"></a>
+                {% elif owner.site_description%}
+                <h1><a href="{%url 'home'%}"><img src="{{owner.logo.url}}" alt=""><span></span>{{owner.site_description}}</a></h1>
+                {% endif %}
+                <!-- Uncomment below if you prefer to use an image logo -->
+            </div>
+
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <li><a class="" href="about">About Us</a></li>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav>
+            <!-- .navbar -->
+
+        </div>
+    </header>
+    <!-- End Header -->
+    {% block content %}
+
+    {% endblock %}
+
+
+
+
+    <footer>
+        <div class="footer-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="footer-content">
+                            <div class="footer-head">
+                                <div class="footer-logo">
+                                    <h2><span></span>{{owner.footer_title}} </h2>
+                                </div>
+
+                                <p>{{owner.footer_description}}.</p>
+                                <div class="footer-icons">
+                                    <ul>
+                                        <li>
+                                            <a href="{{owner.facebook}}"><i class="bi bi-facebook"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="{{owner.Twitter}}"><i class="bi bi-twitter"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="{{owner.Instagram}}"><i class="bi bi-instagram"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="{{owner.linkedIn}}"><i class="bi bi-linkedin"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end single footer -->
+                    <div class="col-md-4">
+                        <div class="footer-content">
+                            <div class="footer-head">
+                                <h4>information</h4>
+                                <p>
+                                   {{owner.Address}}..
+                                </p>
+                                <div class="footer-contacts">
+                                    <p><span>Tel:</span><a href="tel:{{owner.Tel}}"> {{owner.Tel}}</a> </p>
+                                    <p><span>Email:</span><a href="mailto:{{owner.Email}}"> {{owner.Email}}</a> </p>
+                                    <p><span>Working Hours:</span> {{owner.Working_hours}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end single footer -->
+                    <div class="col-md-4">
+                        <div class="footer-content">
+                            <div class="footer-head">
+                                <h4>BOOKS</h4>
+                                <div class="flicker-img">
+                                    {% for image in new_query %}
+                                    {% if image.cover %}
+                                    <a href="{{image.get_absolute_url}}">{{image.id}}<img src="{{image.cover.url}}" alt="{{image.title}}" style="width: 100px; height: 60px;"></a>
+                                    {% else %}
+                                    <a href="{{image.get_absolute_url}}">{{image.id}}<img src="{% static 'img/background/empty.jfif' %}" alt="No image here" style="width: 100px; height: 60px;"></a>
+
+                                    {% endif %}
+                                    {% endfor %}
+                                                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-area-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="copyright text-center">
+                            <p>
+                                &copy; Copyright <strong>{{owner.title}}</strong>. All Rights Reserved
+                            </p>
+                        </div>
+                        <div class="credits">
+
+                            Designed by <a href="https://mysmegearhub.com/" target="_blank">SME Gear</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End  Footer -->
+
+    <div id="preloader"></div>
+    <a href="" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+    
+
+    <!-- Template Main JS File -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+{% extends 'main.html' %}
+ 
+{% load static %}
+<!-- for comments -->
+{% load comments %}
+{% load comments_xtd %}
+ 
+{% block content %}
+ 
+<!-- nav bar -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">All Blogs</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ comment.title }}Title</li>
+    </ol>
+</nav>
+ 
+<div class="container">
+        <div class="card text-white bg-dark mb-3" style="max-width: 50rem;">
+            <div class="card-header">{{ blog_detail.date_published }}Date Published</div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    {{ comment.title }}|{{ blog_detail.title }}Title
+                </h5>
+            <p class="card-text">{{ comment.title }} | {{ blog_detail.body }}</p>
+            </div>
+        </div>
+</div>
+ 
+<!-- For Comments - This code will show the NUMBER OF COMMENTS POSTED.  -->
+{% get_comment_count for object as comment_count %}
+    <div class="py-4 text-center">
+   
+    <!-- Comment count -->
+    &nbsp;&sdot;&nbsp;
+    {{ comment_count }} comment{{ comment_count|pluralize }}
+    ha{{ comment_count|pluralize:"s,ve"}} been posted.
+    </div>
+ 
+    <!-- Posted comment list - This code will show the POSTED COMMENTS -->
+    {% if comment_count %}
+        <ul class="media-list shadow p-3 mb-5 bg-white rounded container">
+        {% render_xtdcomment_tree for object %}
+        </ul>
+    {% endif %}
+ 
+    <!-- Post your comment - This code will show the FORM TO POST COMMENTS -->
+    <div class="comment mt-3 shadow p-3 mb-5 bg-white rounded container">
+        <h4 class="text-center mb-4">Your comment</h4>
+        <div class="card pt-4">
+            {% render_comment_form for object %}
+        </div>
+    </div>
+   
+ 
+{% endblock content %}
