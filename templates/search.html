@@ -63,7 +63,7 @@
                                                           </span> |
                                                           {% endif %}
                                                     <span class="date-type">
-                                                      <i class="bi bi-calendar"></i> {{search.updated_on}}
+                                                      <i class="bi bi-calendar"></i> {{search.created_on}}
                                                     </span>
 
 
@@ -104,7 +104,7 @@
                                                           </span> |
                                                           {% endif %}
                                                     <span class="date-type">
-                                                      <i class="bi bi-calendar"></i> {{search.updated_on}}
+                                                      <i class="bi bi-calendar"></i> {{search.created_on}}
                                                     </span>
 
 
@@ -133,7 +133,7 @@
                                     <div class="popular-tag left-side-tags left-blog">
                                         <h4>Categories</h4>
                                         <ul>
-                                            
+                                            {% if category %}
                                           {% for category in category  %}
                             
                                             <li>
@@ -143,6 +143,8 @@
                                             </li>
                                    
                                             {% endfor %}
+                                            {% else %}
+                                            {% endif %}
                                             
                             
                                         </ul>

@@ -1,22 +1,11 @@
 from django.db import models
-from taggit.managers import TaggableManager
-from ckeditor_uploader.fields import RichTextUploadingField
 from django.urls import reverse
 
 # Create your models here.
 
-#Create your User model her if necessary
-class User(models.Model):
-    author = models.CharField(max_length=50)
-
-    # class Meta:
-    #     verbose_name = "User"
-    #     verbose_plural = "Users"
-    
-    def __str__(self):
-        return self.author
 #Book Model
 
+#The owner details
 class Owner_Details(models.Model):
     meta_author = models.CharField(max_length=200, null=True,blank=True, help_text="Seo author name")
     meta_description = models.CharField(max_length=200, null=True,blank=True, help_text="Seo description")
@@ -42,7 +31,8 @@ class Owner_Details(models.Model):
 
     def __str__(self) -> str:
         return f"Website: {self.title} | Owner: {self.meta_author}"
-    
+
+#The Commenter Email  
 class Comment_Email(models.Model):
     name=models.CharField(max_length=400, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
@@ -57,7 +47,7 @@ STATUS = (
 )
 
 
-
+#Category of books
 class Category(models.Model): #Category for the Article
     title = models.CharField(max_length=200) #Title of the Category
     created_on = models.DateTimeField(auto_now_add=True) #Date of creation
@@ -70,14 +60,13 @@ class Category(models.Model): #Category for the Article
     def __str__(self):
         return self.title
 
+#The Details of the book
 class BookDetailPost(models.Model):
     title = models.CharField(max_length=200, unique=True, help_text="The name of your book") #Title of the Article
-    slug = models.SlugField(max_length=200, unique=True,help_text="Re-type the name of your book", null=True, blank=True) #Unique identifier for the article
+    slug = models.SlugField(max_length=200, unique=True,help_text="Don't Edit, It Populates itself", null=True, blank=True) #Unique identifier for the article
     author = models.CharField( max_length=250,null=True, blank=True) #Author of the Article
     description = models.TextField(help_text="A short description of your book") #Short Description of the article
     quote = models.CharField(max_length=300, null=True, blank=True)
-    # content = RichTextUploadingField(config_name='awesome_ckeditor') #Content of the article, you need to install CKEditor
-    # tags = TaggableManager() #Tags for a Particular Article, You need to install Taggit
     category = models.ForeignKey(Category, related_name='category', on_delete=models.SET_NULL,null=True, blank=True, help_text="Choose the ctegory your book fall in.") #Category of the article
     keywords = models.CharField(max_length=250, help_text="Choose keywords to locate your book easier", null=True, blank=True) #Keywords to be used in SEO
     cover = models.ImageField(upload_to='book_covers/', null=True, blank=True) #Cover Image of the article
@@ -95,7 +84,7 @@ class BookDetailPost(models.Model):
     def get_absolute_url(self):
         return reverse("book_detail", args=[str(self.slug)])
 
-    
+#The About Page  
 class AboutPage(models.Model):
     header= models.CharField(max_length=200, null=True, blank=True, help_text="add the header")
     body=models.TextField(null=True, blank=True)
@@ -103,7 +92,7 @@ class AboutPage(models.Model):
     def __str__(self):
         return self.header
     
-    
+#The Edditorial Members    
 class EditorialMembers(models.Model):
     name=models.CharField(max_length=200, null=True, blank=True)
     department=models.CharField(max_length=200, null=True, blank=True)
@@ -112,7 +101,7 @@ class EditorialMembers(models.Model):
         def __str__(self):
             return self.name
     
-    
+#The Contact Form    
 class ContactUs(models.Model):
     name=models.CharField(max_length=200,null=True, blank=True)
     email=models.CharField(max_length=200,null=True, blank=True)
@@ -123,7 +112,7 @@ class ContactUs(models.Model):
         def __str__(self):
             return self.name
         
-
+#The About Header
 class AboutHeaders(models.Model):
     main_header=models.CharField(max_length=100, null=True, blank=True)
     second_header=models.CharField(max_length=200, null=True, blank=True)
@@ -138,7 +127,7 @@ class AboutHeaders(models.Model):
 
 
 
-
+#The Comment Section
 class Comment(models.Model):
     comment = models.ForeignKey(BookDetailPost, related_name="comments", help_text="Numberof comments in a post", on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=200, help_text="Name of the person making a comment", null=True, blank=True)

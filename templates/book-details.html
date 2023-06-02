@@ -28,7 +28,7 @@
                                         <h2>{{object.title}}</h2>
                                         <div class="entry-meta">
                                             <span class="author-meta"><i class="bi bi-person"></i> <a href="#">{{object.author}}</a></span>
-                                            <span><i class="bi bi-clock"></i> {{object.updated_on}}</span>
+                                            <span><i class="bi bi-clock"></i> {{object.created_on}}</span>
                                             <span class="tag-meta">
                                         <i class="bi bi-folder"></i>
                                         {% if object.category %}
@@ -49,15 +49,21 @@
                                         <div class="entry-content">
                                             <p>{{object.description}}</p>
                                             <blockquote>
+                                                {% if object.quote %}
                                                 <p>{{object.quote}}</p>
+                                                {% else %}
+                                                <p>An Amazing Book..</p>
+                                                {% endif %}
                                             </blockquote>
                                             
                                     </div>
+                                    {% comment %} {% if object.id %} {% endcomment %}
                                     <div class="row" >
                                         <span>
                                         <a href="{% url 'download' object.id%}" class="btn btn-block btn-info text-white download_btn m-auto">Download</a>
                                         </span>
                                     </div>
+                                    
                                 </article>
                                 <div class="clear"></div>
                                 <div class="single-post-comments">
@@ -178,7 +184,7 @@
                                     <div class="popular-tag left-side-tags left-blog">
                                         <h4>Categories</h4>
                                         <ul>
-                                            
+                                           {% if category %}
                                           {% for category in category  %}
                             
                                             <li>
@@ -188,6 +194,8 @@
                                             </li>
                                    
                                             {% endfor %}
+                                            {% else %}
+                                            {% endif %} 
                                             
                             
                                         </ul>

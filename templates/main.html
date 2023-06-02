@@ -47,10 +47,10 @@
         <div class="container d-flex justify-content-between">
 
             <div class="logo d-flex">
-                {% if  owner.logo%}
+                {% if  owner.site_description%}
+                <h1><a href="{%url 'home'%}"><span></span>{{owner.site_description}}</a></h1>
+                {% else%}
                 <a href="{%url 'home'%}"><img src="{{owner.logo.url}}" alt="{{owner.title}}" class="img-fluid"></a>
-                {% elif owner.site_description%}
-                <h1><a href="{%url 'home'%}"><img src="{{owner.logo.url}}" alt=""><span></span>{{owner.site_description}}</a></h1>
                 {% endif %}
                 <!-- Uncomment below if you prefer to use an image logo -->
             </div>
@@ -87,18 +87,42 @@
                                 <p>{{owner.footer_description}}.</p>
                                 <div class="footer-icons">
                                     <ul>
+                                        {% if owner.facebook %}
                                         <li>
                                             <a href="{{owner.facebook}}"><i class="bi bi-facebook"></i></a>
                                         </li>
+                                        {% else %}
+                                        <li>
+                                            <a href="#"><i class="bi bi-facebook"></i></a>
+                                        </li>
+                                        {% endif %}
+                                        {% if owner.Twitter %}
                                         <li>
                                             <a href="{{owner.Twitter}}"><i class="bi bi-twitter"></i></a>
                                         </li>
+                                        {% else %}
+                                        <li>
+                                            <a href="#"><i class="bi bi-twitter"></i></a>
+                                        </li>
+                                        {% endif %}
+                                        {% if  owner.Instagram%}
                                         <li>
                                             <a href="{{owner.Instagram}}"><i class="bi bi-instagram"></i></a>
                                         </li>
+                                        {% else %}
+                                        <li>
+                                            <a href="#"><i class="bi bi-instagram"></i></a>
+                                        </li>
+                                        {% endif %}
+                                        {% if  owner.linkedIn%}
                                         <li>
                                             <a href="{{owner.linkedIn}}"><i class="bi bi-linkedin"></i></a>
                                         </li>
+                                        {% else %}
+                                        <li>
+                                            <a href="#"><i class="bi bi-linkedin"></i></a>
+                                        </li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </div>
@@ -113,9 +137,21 @@
                                    {{owner.Address}}..
                                 </p>
                                 <div class="footer-contacts">
+                                    {% if owner.Tel %}
                                     <p><span>Tel:</span><a href="tel:{{owner.Tel}}"> {{owner.Tel}}</a> </p>
+                                    {% else %}
+                                    <p><span>Tel:</span><a href="#"> No Number For now</a> </p>
+                                    {% endif %}
+                                    {% if owner.Email %}
                                     <p><span>Email:</span><a href="mailto:{{owner.Email}}"> {{owner.Email}}</a> </p>
+                                    {% else %}
+                                    <p><span>Email:</span><a href="#"> No Email for now</a> </p>
+                                    {% endif %}
+                                    {% if  owner.Working_hours%}
                                     <p><span>Working Hours:</span> {{owner.Working_hours}}</p>
+                                    {% else %}
+                                    <p><span>Working Hours:</span> We are Always Here..</p>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -128,13 +164,13 @@
                                 <div class="flicker-img">
                                     {% for image in new_query %}
                                     {% if image.cover %}
-                                    <a href="{{image.get_absolute_url}}">{{image.id}}<img src="{{image.cover.url}}" alt="{{image.title}}" style="width: 100px; height: 60px;"></a>
+                                    <a href="{{image.get_absolute_url}}"><img src="{{image.cover.url}}" alt="{{image.title}}" title="{{image.title}}" style="width: 100px; height: 60px;"></a>
                                     {% else %}
-                                    <a href="{{image.get_absolute_url}}">{{image.id}}<img src="{% static 'img/background/empty.jfif' %}" alt="No image here" style="width: 100px; height: 60px;"></a>
+                                    <a href="{{image.get_absolute_url}}"><img src="{% static 'img/background/empty.jfif' %}" alt="No image here" title="{{image.title}}" style="width: 100px; height: 60px;"></a>
 
                                     {% endif %}
                                     {% endfor %}
-                                                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

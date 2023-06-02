@@ -14,8 +14,13 @@ def paginator_page(request):
 
     return {'book_page': pages}
 
-def latest_uploads():        
-    queryset2=BookDetailPost.objects.all().order_by('-created_on')[:6]
-    owner = Owner_Details.objects.get()
-
+def latest_uploads():  
+    try:      
+        queryset2=BookDetailPost.objects.all().order_by('-created_on')[:6]
+    except:
+        queryset2 = BookDetailPost.objects.all()
+    try:
+        owner = Owner_Details.objects.get()
+    except:
+        owner = Owner_Details.objects.all()
     return queryset2, owner

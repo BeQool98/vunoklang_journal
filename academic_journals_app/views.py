@@ -1,4 +1,3 @@
-from typing import Any, Dict
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
@@ -6,6 +5,7 @@ from django.views.generic import ListView, DetailView
 from django.urls import reverse
 from django.contrib import messages
 from . utils import *
+from .forms import *
 
 
 # Create your views here.
@@ -13,24 +13,22 @@ from . utils import *
 def login_user(request):
     return render(request, "index.html")
 '''
-
-def about_page(request):
-    
-    headers=AboutHeaders.objects.get()
-    about_lists=AboutPage.objects.all()
-    editorial_members=EditorialMembers.objects.all()
+#The About Page
+def about_page(request): 
+    headers= AboutHeaders.objects.get()
+    about_lists= AboutPage.objects.all()
+    editorial_members= EditorialMembers.objects.all()
     queryset2, owner = latest_uploads()
-    
-    
-    print("headers", headers.second_header)
-    context={"headers":headers, 
+    context ={"headers":headers, 
              "about_lists":about_lists, 
-             "editorial_members":editorial_members, "new_query":queryset2,"owner":owner}
+             "editorial_members":editorial_members, 
+             "new_query":queryset2,
+             "owner":owner
+             }
     return render(request, "about_page.html", context)
 
+#The Contact form
 def contact_message(request):
-    
-    
     if request.method == "GET":
         # return HttpResponse("this method is not allowed")
         return HttpResponseRedirect('/about')
@@ -49,12 +47,9 @@ def contact_message(request):
             messages.error(request, "Failed to send Message")
             return HttpResponseRedirect(reverse("about"))
         
-        print("this is the name", name,email,subject, message)
-        return HttpResponseRedirect('/about')
-        
 
 
-
+#The Home View
 class Home(ListView):
     model = BookDetailPost
     template_name= "book.html"
@@ -72,21 +67,14 @@ class Home(ListView):
         context["owner"]= owner
         return context
 
-
-
-
+#The Book Detail 
 class BookDetail(DetailView):
     model = BookDetailPost
-    # form_class = CommentForm
     template_name= "book-details.html"
-    # fields = '__all__'
 
     def get_context_data(self, *args, **kwargs):
          query, owner = latest_uploads()  
          category = Category.objects.all()  
-         user= self.request.user
-
-         print('user:', user.username)
          comment_form = CommentForm()
          unique_comment = Comment.objects.filter(comment=self.get_object()).order_by('-date_created')
          context= super(BookDetail, self).get_context_data(*args,**kwargs)
@@ -95,11 +83,9 @@ class BookDetail(DetailView):
          context["new_query"] = query
          context["unique_comment"] = unique_comment
          context["owner"]= owner
-
          return context
     
     def post(self, request, *args, **kwargs):
-      
         new_comment = Comment(description=request.POST.get('description'), comment=self.get_object(), name=request.POST.get('name'), email=request.POST.get('email'))
         new_comment.save()
         comment_email = Comment_Email(name=request.POST.get('name'), email=request.POST.get('email'))
@@ -108,17 +94,18 @@ class BookDetail(DetailView):
 
 
 
-   
-def download(self, document_id) :
+ #The Download Button  
+def download(request, document_id) :
+        document = get_object_or_404(BookDetailPost, pk=document_id)
         try:
-            document = get_object_or_404(BookDetailPost, pk=document_id)
-        except:
-            messages.info(self, 'Document not found')
-        response = HttpResponse(document.book, content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="{document.book.name}"'
-        return response
+            response = HttpResponse(document.book, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="{document.book.name}"'
+            return response
+        except ValueError:
+            messages.info(request, 'Document not found')
+            return HttpResponseRedirect(reverse("home"))
 
-
+#The Category Page
 def category_id(request, title):
     query, owner = latest_uploads()
     category = Category.objects.all()
@@ -126,10 +113,15 @@ def category_id(request, title):
     page_data = paginator_page(request)
     pages = page_data['book_page']
 
-    context = { 'category_id': category_id, 'category': category, 'book_page': pages, 'owner': owner, 'new_query':query }
-    
+    context = { 'category_id': category_id, 
+               'category': category, 
+               'book_page': pages, 
+               'owner': owner, 
+               'new_query':query
+                 }
     return render(request, 'category-option-id.html', context)
 
+#The Search Page
 def search(request):
     query, owner = latest_uploads()
     category = Category.objects.all()
@@ -142,8 +134,6 @@ def search(request):
         search = request.POST.get('search_btn')
         searched = BookDetailPost.objects.filter(title__contains=search)
         searched_author = BookDetailPost.objects.filter(author__contains=search)
-
-
         context = {
              'searched': searched,
              'searched_author': searched_author,
